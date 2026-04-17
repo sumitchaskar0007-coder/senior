@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiDownload } from 'react-icons/fi';
-import api from '../api';
+import api, { normalizeCollection } from '../api';
 
 const Notice = () => {
   const [notices, setNotices] = useState([]);
@@ -13,7 +13,7 @@ const Notice = () => {
   const fetchNotices = async () => {
     try {
       const response = await api.get('/notices');
-      setNotices(response.data);
+      setNotices(normalizeCollection(response.data, ['notices']));
     } catch (error) {
       console.error('Failed to fetch notices:', error);
     } finally {

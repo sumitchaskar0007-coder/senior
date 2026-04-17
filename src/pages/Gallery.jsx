@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../api';
+import api, { normalizeCollection } from '../api';
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -13,7 +13,7 @@ const Gallery = () => {
   const fetchImages = async () => {
     try {
       const response = await api.get('/gallery');
-      setImages(response.data);
+      setImages(normalizeCollection(response.data, ['gallery', 'images']));
     } catch (error) {
       console.error('Failed to fetch images:', error);
     } finally {

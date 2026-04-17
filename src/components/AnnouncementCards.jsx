@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiClock, FiBell } from 'react-icons/fi';
-import api from '../api';
+import api, { normalizeCollection } from '../api';
 
 const AnnouncementCards = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -15,7 +15,8 @@ const AnnouncementCards = () => {
   const fetchAnnouncements = async () => {
     try {
       const response = await api.get('/announcements');
-      const activeAnnouncements = response.data.filter(a => a.isActive);
+      const activeAnnouncements = normalizeCollection(response.data, ['announcements'])
+        .filter((a) => a.isActive);
       setAnnouncements(activeAnnouncements);
     } catch (error) {
       console.error('Failed to fetch announcements:', error);

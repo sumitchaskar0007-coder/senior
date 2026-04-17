@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiArrowLeft, FiEye } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import api from '../../api';
+import api, { normalizeCollection } from '../../api';
 
 const BlogAdmin = () => {
   const [blogs, setBlogs] = useState([]);
@@ -23,7 +23,7 @@ const BlogAdmin = () => {
   const fetchBlogs = async () => {
     try {
       const response = await api.get('/blogs');
-      setBlogs(response.data);
+      setBlogs(normalizeCollection(response.data, ['blogs']));
     } catch (error) {
       toast.error('Failed to fetch blogs');
     } finally {

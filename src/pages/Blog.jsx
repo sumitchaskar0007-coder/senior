@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../api';
+import api, { normalizeCollection } from '../api';
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,7 +13,7 @@ const Blog = () => {
   const fetchBlogs = async () => {
     try {
       const response = await api.get('/blogs');
-      setBlogs(response.data);
+      setBlogs(normalizeCollection(response.data, ['blogs']));
     } catch (error) {
       console.error('Failed to fetch blogs:', error);
     } finally {

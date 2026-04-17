@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../api';
+import api, { normalizeCollection } from '../api';
 
 const Announcement = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -13,7 +13,8 @@ const Announcement = () => {
     try {
       const response = await api.get('/announcements');
       // Filter only active announcements for public view
-      const activeAnnouncements = response.data.filter(a => a.isActive);
+      const activeAnnouncements = normalizeCollection(response.data, ['announcements'])
+        .filter((a) => a.isActive);
       setAnnouncements(activeAnnouncements);
     } catch (error) {
       console.error('Failed to fetch announcements:', error);

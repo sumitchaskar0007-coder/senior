@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
-import api from '../api';
+import api, { normalizeEntity } from '../api';
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -15,7 +15,7 @@ const BlogDetails = () => {
   const fetchBlog = async () => {
     try {
       const response = await api.get(`/blogs/${id}`);
-      setBlog(response.data);
+      setBlog(normalizeEntity(response.data, ['blog']));
     } catch (error) {
       console.error('Failed to fetch blog:', error);
     } finally {

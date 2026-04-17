@@ -9,7 +9,7 @@ import {
   FiToggleRight,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
-import api from "../../api";
+import api, { normalizeCollection, normalizeStringList } from "../../api";
 
 const CareerAdmin = () => {
   const [careers, setCareers] = useState([]);
@@ -34,7 +34,7 @@ const CareerAdmin = () => {
   const fetchCareers = async () => {
     try {
       const res = await api.get("/careers");
-      setCareers(res.data);
+      setCareers(normalizeCollection(res.data, ["careers"]));
     } catch {
       toast.error("Failed to fetch careers");
     } finally {
@@ -77,6 +77,22 @@ const CareerAdmin = () => {
       deadline: "",
       isActive: true,
     });
+  };
+
+  const handleEdit = (career) => {
+    setEditingCareer(career);
+    setFormData({
+      title: career.title || "",
+      department: career.department || "",
+      description: career.description || "",
+      requirements: normalizeStringList(career.requirements).length
+        ? normalizeStringList(career.requirements)
+        : [""],
+      location: career.location || "",
+      deadline: career.deadline ? career.deadline.slice(0, 10) : "",
+      isActive: career.isActive ?? true,
+    });
+    setShowModal(true);
   };
 
   if (loading)
@@ -150,7 +166,7 @@ const CareerAdmin = () => {
                 </td>
 
                 <td className="p-3 flex gap-3">
-                  <button onClick={() => { setEditingCareer(c); setShowModal(true); }}>
+                  <button onClick={() => handleEdit(c)}>
                     <FiEdit2 />
                   </button>
 

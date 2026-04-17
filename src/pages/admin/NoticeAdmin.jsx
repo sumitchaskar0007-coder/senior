@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiArrowLeft, FiDownload } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import api from '../../api';
+import api, { normalizeCollection } from '../../api';
 
 const NoticeAdmin = () => {
   const [notices, setNotices] = useState([]);
@@ -22,7 +22,7 @@ const NoticeAdmin = () => {
   const fetchNotices = async () => {
     try {
       const response = await api.get('/notices');
-      setNotices(response.data);
+      setNotices(normalizeCollection(response.data, ['notices']));
     } catch (error) {
       toast.error('Failed to fetch notices');
     } finally {

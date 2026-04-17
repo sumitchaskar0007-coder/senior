@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiArrowLeft } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import api from '../../api';
+import api, { normalizeCollection } from '../../api';
 
 const GalleryAdmin = () => {
   const [images, setImages] = useState([]);
@@ -22,7 +22,7 @@ const GalleryAdmin = () => {
   const fetchImages = async () => {
     try {
       const response = await api.get('/gallery');
-      setImages(response.data);
+      setImages(normalizeCollection(response.data, ['gallery', 'images']));
     } catch (error) {
       toast.error('Failed to fetch images');
       console.error('Fetch error:', error);

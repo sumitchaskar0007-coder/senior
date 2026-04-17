@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiChevronLeft, FiChevronRight, FiClock } from 'react-icons/fi';
-import api from '../api';
+import api, { normalizeCollection } from '../api';
 
 const AnnouncementSlider = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -27,7 +27,8 @@ const AnnouncementSlider = () => {
     try {
       const response = await api.get('/announcements');
       // Filter only active announcements
-      const activeAnnouncements = response.data.filter(a => a.isActive);
+      const activeAnnouncements = normalizeCollection(response.data, ['announcements'])
+        .filter((a) => a.isActive);
       setAnnouncements(activeAnnouncements);
     } catch (error) {
       console.error('Failed to fetch announcements:', error);

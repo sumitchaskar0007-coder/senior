@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiArrowLeft, FiToggleLeft, FiToggleRight } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import api from '../../api';
+import api, { normalizeCollection } from '../../api';
 
 const AnnouncementAdmin = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -22,7 +22,7 @@ const AnnouncementAdmin = () => {
   const fetchAnnouncements = async () => {
     try {
       const response = await api.get('/announcements');
-      setAnnouncements(response.data);
+      setAnnouncements(normalizeCollection(response.data, ['announcements']));
     } catch (error) {
       toast.error('Failed to fetch announcements');
     } finally {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../api';
+import api, { normalizeCollection, normalizeStringList } from '../api';
 
 const Career = () => {
   const [careers, setCareers] = useState([]);
@@ -13,7 +13,7 @@ const Career = () => {
   const fetchCareers = async () => {
     try {
       const response = await api.get('/careers/active');
-      setCareers(response.data);
+      setCareers(normalizeCollection(response.data, ['careers']));
     } catch (error) {
       console.error('Failed to fetch careers:', error);
     } finally {
@@ -101,7 +101,7 @@ const Career = () => {
               <div>
                 <h3 className="text-lg font-semibold mb-2">Requirements</h3>
                 <ul className="list-disc pl-5 space-y-1">
-                  {selectedCareer.requirements.map((req, index) => (
+                  {normalizeStringList(selectedCareer.requirements).map((req, index) => (
                     <li key={index} className="text-gray-700">{req}</li>
                   ))}
                 </ul>
